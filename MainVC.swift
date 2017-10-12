@@ -56,10 +56,14 @@ class MainVC: UIViewController {
 
 extension MainVC: UITableViewDelegate, UITableViewDataSource {
   
+  numberOfRowsInSection() {
+    return fetchedCompanies.count
+  }
+  
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "CompanyCell")
-    cell.tickerLabel?.text = fetchedCompany[indexPath.row].ticker
-    cell.valueLabel?.text = fetchedCompany[indexPath.row].value
+    cell.tickerLabel?.text = fetchedCompanies[indexPath.row].ticker
+    cell.valueLabel?.text = fetchedCompanies[indexPath.row].value
     return cell
   }
 }
