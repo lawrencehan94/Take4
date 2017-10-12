@@ -12,6 +12,11 @@ class MainVC: UIViewController {
   var fetchedCompanies = [Company]()
   @IBOutlet weak var tableView: UITableView!
   
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    getData()
+  }
+  
   func getData() {
     let userPasswordString = "babf6dca6f14d9dd9d5d9cefbb74cb23:e1fd3e208302dff589f3748c88b0f6f3"
     let userPasswordData = userPasswordString.data(using: String.Encoding.utf8)
@@ -34,11 +39,14 @@ class MainVC: UIViewController {
       
       else {
         do {
-          if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [String: Any] {
-            for eachCompany in json {
-              let ticker = eachCompany["identifier"]
-              let value = eachCompany["value"]
-              self.fetchedCountry.append(Company(ticker: ticker, value: value))
+            if let fetchedData = try JSONSerialization.jsonObject(with: data!, options: .mutableLeaves //or.allowfragments) as! NSArray {
+              for eachFetchedCompany in fetchedData {
+                let eachCompany = eachFetchedCompany as! [String: Any]
+                let tickerPull = eachCompany["identifier"] as! String
+                let valuePull = eachCompany["value"] as! String
+                
+                self.fetchedCompanies.append(Company(ticker: tickerPull, value: valuePull))
+              }
             }
             self.tableView.reloadData()
           }
