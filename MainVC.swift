@@ -8,17 +8,9 @@ class Company {
 }
 
 class MainVC: UIViewController {
+  
   var fetchedCompanies = [Company]()
   @IBOutlet weak var tableView: UITableView!
-  
-  func updateData(json: [String: Any]) {
-    if let ticker = json["identifier"], let value = json["value"] {
-    
-    } else {
-      print("Failed to find matching ticker and value in data")
-    }
-  
-  }
   
   func getData() {
     let userPasswordString = "babf6dca6f14d9dd9d5d9cefbb74cb23:e1fd3e208302dff589f3748c88b0f6f3"
@@ -48,6 +40,7 @@ class MainVC: UIViewController {
               let value = eachCompany["value"]
               self.fetchedCountry.append(Company(ticker: ticker, value: value))
             }
+            self.tableView.reloadData()
           }
         } catch {
           print("Error in JSON serialization")
@@ -59,5 +52,15 @@ class MainVC: UIViewController {
     
   }
   
-  
 }
+
+extension MainVC: UITableViewDelegate, UITableViewDataSource {
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueReusableCell(withIdentifier: "CompanyCell")
+    cell.tickerLabel?.text = fetchedCompany[indexPath.row].ticker
+    cell.valueLabel?.text = fetchedCompany[indexPath.row].value
+    return cell
+  }
+}
+
